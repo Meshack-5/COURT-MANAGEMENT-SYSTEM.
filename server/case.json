@@ -1,0 +1,79 @@
+[
+  {
+    "id": "CR-2026-118",
+    "client": "Mary Wambui",
+    "category": "Criminal",
+    "judge": "Judge A. Njeri",
+    "status": "Closed",
+    "court": "Court Room 3",
+    "registeredAt": null,
+    "nextCourtDate": null,
+    "nextCourtTime": null
+  },
+  {
+    "id": "CV-2026-442",
+    "client": "Kenya Build Ltd.",
+    "category": "Civil",
+    "judge": "Judge K. Ochieng",
+    "status": "Pending",
+    "court": "Chamber 2",
+    "registeredAt": null,
+    "nextCourtDate": null,
+    "nextCourtTime": null
+  },
+  {
+    "id": "ADM-2026-067",
+    "client": "Samuel Kibet",
+    "category": "Administrative",
+    "judge": "Judge M. Otieno",
+    "status": "Mention",
+    "court": "Main Hall",
+    "registeredAt": null,
+    "nextCourtDate": null,
+    "nextCourtTime": null
+  },
+  {
+    "id": "FAM-2026-201",
+    "client": "Grace Muthoni",
+    "category": "Family",
+    "judge": "Judge H. Wanjiku",
+    "status": "Hearing",
+    "court": "Court Room 1",
+    "registeredAt": null,
+    "nextCourtDate": null,
+    "nextCourtTime": null
+  },
+  {
+    "id": "FAM-2026-202",
+    "client": "njeri Muthoni",
+    "category": "Family",
+    "judge": "Judge H. Wanjiku",
+    "status": "Review",
+    "court": "Court Room 9",
+    "registeredAt": null,
+    "nextCourtDate": null,
+    "nextCourtTime": null
+  },
+  {
+    "id": "CASE-1793786971240",
+    "client": "Meshack Odupoi",
+    "category": "Criminal",
+    "judge": "Mwaniki",
+    "status": "Hearing",
+    "court": "court room 6",
+    "registeredAt": "2026-11-04T10:09:31.240Z",
+    "nextCourtDate": "2026-11-11",
+    "nextCourtTime": "13:09"
+  },
+  {
+    "id": "CASE-1793788280032",
+    "client": "Gorge",
+    "category": "Civil",
+    "judge": "john",
+    "status": "Pending",
+    "court": "court room 8",
+    "registeredAt": "2026-11-04T10:31:20.032Z",
+    "nextCourtDate": "2026-04-02",
+    "nextCourtTime": "16:30"
+  }
+]

@@ -1,0 +1,139 @@
+const sqlite3 = require('sqlite3').verbose();
+const path = require('path');
+
+const dbPath = path.join(__dirname, 'court_management.db');
+
+const db = new sqlite3.Database(dbPath, (err) => {
+  if (err) {
+    console.error('Failed to connect to database:', err.message);
+  } else {
+    console.log('Connected to SQLite database at court_management.db');
+  }
+});
+
+const initDatabase = () => {
+  db.serialize(() => {
+    db.run(`
+      CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        full_name TEXT NOT NULL,
+        email TEXT NOT NULL UNIQUE,
+        role TEXT NOT NULL,
+        password_hash TEXT NOT NULL,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
+    db.run(`
+      CREATE TABLE IF NOT EXISTS cases (
+        id TEXT PRIMARY KEY,
+        client_name TEXT NOT NULL,
+        category TEXT NOT NULL,
+        judge_name TEXT NOT NULL,
+        status TEXT NOT NULL,
+        court_name TEXT NOT NULL,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
+    db.run(`
+      CREATE TABLE IF NOT EXISTS hearings (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        case_id TEXT NOT NULL,
+        hearing_date TEXT NOT NULL,
+        hearing_time TEXT NOT NULL,
+        courtroom TEXT NOT NULL,
+        notes TEXT,
+        FOREIGN KEY(case_id) REFERENCES cases(id)
+      )
+    `);
+
+    db.run(`
+      INSERT OR IGNORE INTO users (id, full_name, email, role, password_hash)
+      VALUES
+        (1, 'Judge D. Atieno', 'judge@courtease.com', 'judge', 'demo-password'),
+        (2, 'Clerk N. Muthoni', 'clerk@courtease.com', 'clerk', 'demo-password')
+    `);
+
+    db.run(`
+      INSERT OR IGNORE INTO cases (id, client_name, category, judge_name, status, court_name)
+      VALUES
+        ('CR-2026-118', 'Mary Wambui', 'Criminal', 'Judge A. Njeri', 'Hearing', 'Court Room 3'),
+        ('CV-2026-442', 'Kenya Build Ltd.', 'Civil', 'Judge K. Ochieng', 'Pending', 'Chamber 2'),
+        ('ADM-2026-067', 'Samuel Kibet', 'Administrative', 'Judge M. Otieno', 'Closed', 'Main Hall'),
+        ('FAM-2026-201', 'Grace Muthoni', 'Family', 'Judge H. Wanjiku', 'Review', 'Court Room 1')
+    `);
+
+    db.run(`
+      INSERT OR IGNORE INTO hearings (id, case_id, hearing_date, hearing_time, courtroom, notes)
+      VALUES
+        (1, 'CR-2026-118', '2026-11-05', '09:30', 'Court Room 3', 'Preliminary hearing'),
+        (2, 'CV-2026-442', '2026-11-06', '11:00', 'Chamber 2', 'Mediation review'),
+        (3, 'FAM-2026-201', '2026-11-07', '14:15', 'Court Room 1', 'Custody review')
+    `);
+  });
+};
+
+const getAllCases = () => {
+  return new Promise((resolve, reject) => {
+    db.all('SELECT * FROM cases ORDER BY created_at DESC', (err, rows) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(rows);
+      }
+    });
+  });
+};
+
+const getCaseById = (id) => {
+  return new Promise((resolve, reject) => {
+    db.get('SELECT * FROM cases WHERE id = ?', [id], (err, row) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(row);
+      }
+    });
+  });
+};
+
+const createCase = ({ id, client_name, category, judge_name, status, court_name }) => {
+  return new Promise((resolve, reject) => {
+    db.run(
+      `INSERT INTO cases (id, client_name, category, judge_name, status, court_name)
+       VALUES (?, ?, ?, ?, ?, ?)`,
+      [id, client_name, category, judge_name, status, court_name],
+      function (err) {
+        if (err) {
+          reject(err);
+        } else {
+          resolve({ id, client_name, category, judge_name, status, court_name });
+        }
+      }
+    );
+  });
+};
+
+const getUserByEmail = (email) => {
+  return new Promise((resolve, reject) => {
+    db.get('SELECT * FROM users WHERE email = ?', [email], (err, row) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(row);
+      }
+    });
+  });
+};
+
+initDatabase();
+
+module.exports = {
+  db,
+  initDatabase,
+  getAllCases,
+  getCaseById,
+  createCase,
+  getUserByEmail
+};
