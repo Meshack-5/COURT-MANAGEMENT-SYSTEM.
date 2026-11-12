@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Court Management System | Login</title>
+  <style>
+    :root {
+      --bg: #f3f7ff;
+      --panel: #ffffff;
+      --panel-soft: #edf3ff;
+      --primary: #0b3d91;
+      --primary-dark: #072b61;
+      --primary-soft: #dfeeff;
+      --text: #1d2a39;
+      --muted: #64748b;
+      --border: #dfe8f5;
+      --success: #1ea76a;
+      --shadow: 0 20px 45px rgba(8, 39, 87, 0.12);
+      --radius: 22px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #eef5ff 0%, #f9fbff 100%);
+      color: var(--text);
+    }
+
+    .page {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .login-shell {
+      width: min(1100px, 100%);
+      min-height: 680px;
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid rgba(223, 232, 245, 0.9);
+      border-radius: 30px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      backdrop-filter: blur(8px);
+    }
+
+    .brand-panel {
+      position: relative;
+      background: linear-gradient(135deg, #0a2e67 0%, #123d8e 100%);
+      color: white;
+      padding: 48px 42px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .brand-panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top right, rgba(255, 255, 255, 0.18), transparent 30%);
+    }
+
+    .brand-panel>* {
+      position: relative;
+      z-index: 1;
+    }
+
+    .brand-top {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    .brand-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      display: grid;
+      place-items: center;
+      font-size: 1.5rem;
+    }
+
+    .hero-copy {
+      max-width: 420px;
+    }
+
+    .hero-copy h1 {
+      margin: 0 0 16px;
+      font-size: clamp(2.2rem, 3vw, 3.3rem);
+      line-height: 1.12;
+    }
+
+    .hero-copy p {
+      margin: 0;
+      font-size: 1.05rem;
+      line-height: 1.7;
+      color: rgba(255, 255, 255, 0.82);
+    }
+
+    .feature-list {
+      display: grid;
+      gap: 16px;
+      margin-top: 28px;
+    }
+
+    .feature-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 16px;
+      padding: 14px 16px;
+    }
+
+    .feature-badge {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.14);
+      display: grid;
+      place-items: center;
+      font-size: 1.1rem;
+    }
+
+    .feature-item span {
+      font-size: 0.96rem;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .form-panel {
+      background: rgba(255, 255, 255, 0.96);
+      padding: 48px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .form-box {
+      width: min(100%, 420px);
+    }
+
+    .form-header {
+      margin-bottom: 28px;
+    }
+
+    .eyebrow {
+      margin: 0 0 10px;
+      color: var(--primary);
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-size: 0.72rem;
+    }
+
+    .form-header h2 {
+      margin: 0;
+      font-size: clamp(1.8rem, 2vw, 2.5rem);
+      color: var(--text);
+    }
+
+    .subtitle {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 0.96rem;
+      line-height: 1.6;
+    }
+
+    form {
+      display: grid;
+      gap: 18px;
+    }
+
+    .field {
+      display: grid;
+      gap: 8px;
+    }
+
+    .field label {
+      font-weight: 600;
+      color: var(--text);
+      font-size: 0.92rem;
+    }
+
+    .input-wrap {
+      position: relative;
+    }
+
+    .input-wrap input {
+      width: 100%;
+      border: 1px solid var(--border);
+      background: #f9fbff;
+      border-radius: 14px;
+      height: 54px;
+      padding: 14px 16px 14px 46px;
+      font-size: 1rem;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .input-wrap input:focus {
+      border-color: rgba(11, 61, 145, 0.5);
+      box-shadow: 0 0 0 4px rgba(11, 61, 145, 0.08);
+    }
+
+    .input-wrap .icon {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      font-size: 1rem;
+    }
+
+    .row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .check {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .check input {
+      accent-color: var(--primary);
+    }
+
+    .link {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .login-btn {
+      border: none;
+      border-radius: 14px;
+      height: 54px;
+      background: linear-gradient(135deg, var(--primary), #2d69d9);
+      color: white;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 12px 26px rgba(11, 61, 145, 0.2);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .login-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 14px 28px rgba(11, 61, 145, 0.24);
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      color: var(--muted);
+      font-size: 0.8rem;
+      margin: 6px 0;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: "";
+      height: 1px;
+      flex: 1;
+      background: var(--border);
+    }
+
+    .secondary-btn {
+      width: 100%;
+      border: 1px solid var(--border);
+      background: var(--panel);
+      color: var(--text);
+      border-radius: 14px;
+      height: 52px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .signup {
+      margin-top: 20px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .signup a {
+      color: var(--primary);
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    @media (max-width: 900px) {
+      .login-shell {
+        grid-template-columns: 1fr;
+      }
+
+      .brand-panel {
+        min-height: 300px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .page {
+        padding: 14px;
+      }
+
+      .brand-panel,
+      .form-panel {
+        padding: 28px 20px;
+      }
+
+      .brand-top {
+        font-size: 1.2rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+    <div class="login-shell">
+      <section class="brand-panel">
+        <div class="brand-top">
+          <div class="brand-icon">⚖</div>
+          <span>CourtEase</span>
+        </div>
+
+        <div class="hero-copy">
+          <h1>Justice starts with secure access.</h1>
+          <p>
+            Manage court records, case schedules, and legal workflows with a single secure platform built for today’s
+            judicial teams.
+          </p>
+
+          <div class="feature-list">
+            <div class="feature-item">
+              <div class="feature-badge">✓</div>
+              <span>Track hearings and case progression</span>
+            </div>
+            <div class="feature-item">
+              <div class="feature-badge">✓</div>
+              <span>Access legal documents in one dashboard</span>
+            </div>
+            <div class="feature-item">
+              <div class="feature-badge">✓</div>
+              <span>Keep administrative tasks organized</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="form-panel">
+        <div class="form-box">
+          <div class="form-header">
+            <p class="eyebrow">Welcome back</p>
+            <h2>Sign in</h2>
+            <div class="subtitle">Access the court management portal and continue with your daily legal operations.
+            </div>
+          </div>
+
+          <form>
+            <div class="field">
+              <label for="email">Email address</label>
+              <div class="input-wrap">
+                <span class="icon">✉</span>
+                <input id="email" type="email" placeholder="you@court.gov" />
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="password">Password</label>
+              <div class="input-wrap">
+                <span class="icon">🔒</span>
+                <input id="password" type="password" placeholder="Enter your password" />
+              </div>
+            </div>
+
+            <div class="row">
+              <label class="check">
+                <input type="checkbox" />
+                <span>Remember me</span>
+              </label>
+              <a href="#" class="link">Forgot password?</a>
+            </div>
+
+            <button type="submit" class="login-btn">Login</button>
+
+            <div class="divider">or</div>
+
+            <button type="button" class="secondary-btn">Continue with SSO</button>
+          </form>
+
+          <div class="signup">
+            Need an account? <a href="#">Contact admin</a>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+  <script>
+    const form = document.querySelector("form");
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      // Simple validation
+      if (!email || !password) {
+        alert("Please fill in both fields.");
+        return;
+      }
+
+     // redirect to dashboard.html on sucessful login
+     window.location.href ="dashboard.html";
+    });
+
+  </script>
+</body>
+</html>

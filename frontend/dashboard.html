@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Court Management Dashboard</title>
+    <link rel="stylesheet" href="dashboard.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-mark">⚖</div>
+          <span>CourtEase</span>
+        </div>
+
+        <nav class="nav-group" aria-label="Sidebar navigation">
+          <div class="nav-label">Main</div>
+          <button class="nav-item active" type="button">
+            <span class="nav-icon">⌂</span>
+            Overview
+          </button>
+          <button class="nav-item" type="button">
+            <span class="nav-icon"></span>
+            Cases
+          </button>
+          <button class="nav-item" type="button">
+            <span class="nav-icon">🕒</span>
+            Hearings
+          </button>
+          <button class="nav-item" type="button">
+            <span class="nav-icon">👥</span>
+            Clients
+          </button>
+        </nav>
+
+        <nav class="nav-group" aria-label="Administration navigation">
+          <div class="nav-label">Administration</div>
+          <button class="nav-item" type="button">
+            <span class="nav-icon">📊</span>
+            Reports
+          </button>
+          <button class="nav-item" type="button">
+            <span class="nav-icon">⚙</span>
+            Settings
+          </button>
+        </nav>
+
+        <div class="sidebar-card">
+          <h3>Judicial Focus</h3>
+          <p>Review five urgent matters before noon and confirm hearing schedules for the afternoon session.</p>
+        </div>
+      </aside>
+
+      <main class="content">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Good morning</p>
+            <h1>Judicial Dashboard</h1>
+          </div>
+
+          <div class="topbar-actions">
+            <label class="search-box" aria-label="Search cases">
+              <span>🔎</span>
+              <input type="search" placeholder="Search case files" />
+            </label>
+            <button class="primary-btn" type="button">+ Add Case</button>
+            <div class="user-pill" aria-label="User profile">
+              <div class="avatar">JD</div>
+              <div class="user-meta">
+                <strong>Judge D. Atieno</strong>
+                <span id="today-date">Today</span>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <section class="stats-grid" aria-label="Key court statistics">
+          <article class="stat-card">
+            <div class="top">
+              <p class="label">Cases Filed</p>
+              <div class="stat-icon blue">📄</div>
+            </div>
+            <div class="value">
+              <strong>148</strong>
+              <span class="trend up">+12.4%</span>
+            </div>
+          </article>
+
+          <article class="stat-card">
+            <div class="top">
+              <p class="label">Active Matters</p>
+              <div class="stat-icon green">⚖️</div>
+            </div>
+            <div class="value">
+              <strong>96</strong>
+              <span class="trend up">+6.1%</span>
+            </div>
+          </article>
+
+          <article class="stat-card">
+            <div class="top">
+              <p class="label">Hearings</p>
+              <div class="stat-icon yellow">🗓️</div>
+            </div>
+            <div class="value">
+              <strong>23</strong>
+              <span class="trend down">-2.3%</span>
+            </div>
+          </article>
+
+          <article class="stat-card">
+            <div class="top">
+              <p class="label">Pending Orders</p>
+              <div class="stat-icon red">⏳</div>
+            </div>
+            <div class="value">
+              <strong>17</strong>
+              <span class="trend up">+4.8%</span>
+            </div>
+          </article>
+        </section>
+
+        <section class="panel-grid">
+          <article class="panel">
+            <div class="panel-header">
+              <h2>Case Flow</h2>
+              <div class="filter">This Year ▾</div>
+            </div>
+
+            <div class="chart" aria-label="Monthly case chart">
+              <div class="bar-group">
+                <div class="bar-stack">
+                  <span class="bar primary" style="height: 48%"></span>
+                  <span class="bar success" style="height: 62%"></span>
+                </div>
+                <span class="bar-label">Jan</span>
+              </div>
+              <div class="bar-group">
+                <div class="bar-stack">
+                  <span class="bar primary" style="height: 68%"></span>
+                  <span class="bar success" style="height: 76%"></span>
+                </div>
+                <span class="bar-label">Feb</span>
+              </div>
+              <div class="bar-group">
+                <div class="bar-stack">
+                  <span class="bar primary" style="height: 58%"></span>
+                  <span class="bar success" style="height: 70%"></span>
+                </div>
+                <span class="bar-label">Mar</span>
+              </div>
+              <div class="bar-group">
+                <div class="bar-stack">
+                  <span class="bar primary" style="height: 80%"></span>
+                  <span class="bar success" style="height: 68%"></span>
+                </div>
+                <span class="bar-label">Apr</span>
+              </div>
+              <div class="bar-group">
+                <div class="bar-stack">
+                  <span class="bar primary" style="height: 72%"></span>
+                  <span class="bar success" style="height: 94%"></span>
+                </div>
+                <span class="bar-label">May</span>
+              </div>
+              <div class="bar-group">
+                <div class="bar-stack">
+                  <span class="bar primary" style="height: 88%"></span>
+                  <span class="bar success" style="height: 74%"></span>
+                </div>
+                <span class="bar-label">Jun</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-header">
+              <h2>Case Status</h2>
+              <div class="filter">Live</div>
+            </div>
+
+            <div class="status-stack">
+              <div class="ring-card">
+                <div class="ring-left">
+                  <div class="ring primary">
+                    <div class="ring-inner">72%</div>
+                  </div>
+                  <div class="status-meta">
+                    <strong>Ongoing</strong>
+                    <span>In trial or review</span>
+                  </div>
+                </div>
+                <div class="status-number">68</div>
+              </div>
+
+              <div class="ring-card">
+                <div class="ring-left">
+                  <div class="ring success">
+                    <div class="ring-inner">56%</div>
+                  </div>
+                  <div class="status-meta">
+                    <strong>Resolved</strong>
+                    <span>Closed successfully</span>
+                  </div>
+                </div>
+                <div class="status-number">54</div>
+              </div>
+
+              <div class="ring-card">
+                <div class="ring-left">
+                  <div class="ring warning">
+                    <div class="ring-inner">38%</div>
+                  </div>
+                  <div class="status-meta">
+                    <strong>Pending</strong>
+                    <span>Awaiting action</span>
+                  </div>
+                </div>
+                <div class="status-number">26</div>
+              </div>
+            </div>
+          </article>
+        </section>
+
+        <section class="lower-grid">
+          <article class="panel">
+            <div class="panel-header">
+              <h2>Recent Matters</h2>
+              <div class="filter">Updated today</div>
+            </div>
+
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Case ID</th>
+                    <th>Client</th>
+                    <th>Category</th>
+                    <th>Judge</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>CR-2024-118</td>
+                    <td>Mary Wambui</td>
+                    <td>Criminal</td>
+                    <td>Judge A. Njeri</td>
+                    <td><span class="case-tag hearing">Hearing</span></td>
+                  </tr>
+                  <tr>
+                    <td>CV-2024-442</td>
+                    <td>Kenya Build Ltd.</td>
+                    <td>Civil</td>
+                    <td>Judge K. Ochieng</td>
+                    <td><span class="case-tag pending">Pending</span></td>
+                  </tr>
+                  <tr>
+                    <td>ADM-2024-067</td>
+                    <td>Samuel Kibet</td>
+                    <td>Administrative</td>
+                    <td>Judge M. Otieno</td>
+                    <td><span class="case-tag closed">Closed</span></td>
+                  </tr>
+                  <tr>
+                    <td>FAM-2024-201</td>
+                    <td>Grace Muthoni</td>
+                    <td>Family</td>
+                    <td>Judge H. Wanjiku</td>
+                    <td><span class="case-tag hearing">Review</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-header">
+              <h2>Upcoming</h2>
+              <div class="filter">This week</div>
+            </div>
+
+            <ul class="schedule-list">
+              <li class="schedule-item">
+                <div class="date-box">
+                  <strong>12</strong>
+                  <span>Tue</span>
+                </div>
+                <div>
+                  <h4>Criminal Review</h4>
+                  <p>09:30 AM · Court Room 3</p>
+                </div>
+              </li>
+
+              <li class="schedule-item">
+                <div class="date-box">
+                  <strong>14</strong>
+                  <span>Thu</span>
+                </div>
+                <div>
+                  <h4>Land Dispute Mediation</h4>
+                  <p>11:00 AM · Chamber 2</p>
+                </div>
+              </li>
+
+              <li class="schedule-item">
+                <div class="date-box">
+                  <strong>16</strong>
+                  <span>Fri</span>
+                </div>
+                <div>
+                  <h4>Judgment Delivery</h4>
+                  <p>02:15 PM · Main Hall</p>
+                </div>
+              </li>
+            </ul>
+          </article>
+        </section>
+      </main>
+    </div>
+    
+
+    <script>
+      const dateLabel = document.getElementById('today-date');
+      const today = new Date();
+
+      dateLabel.textContent = new Intl.DateTimeFormat('en-US', {
+        weekday: 'short',
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric'
+      }).format(today);
+    </script>
+  </body>
+</html>

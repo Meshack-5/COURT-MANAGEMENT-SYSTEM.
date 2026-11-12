@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Court Management Dashboard</title>
+    <link rel="stylesheet" href="dashboard.css" />
+    <style>
+        /* Toggle utility states between routing sections */
+        .dashboard-view {
+            display: none;
+        }
+
+        .dashboard-view.active-view {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-shell">
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="brand-mark">⚖</div>
+                <span>CourtEase</span>
+            </div>
+            <nav class="nav-group" aria-label="Sidebar navigation">
+                <div class="nav-label">Main</div>
+                <button class="nav-item active" type="button" data-target="view-overview">
+                    <span class="nav-icon">⌂</span> Overview
+                </button>
+                <button class="nav-item" type="button" data-target="view-cases">
+                    <span class="nav-icon">📁</span> Cases
+                </button>
+                <button class="nav-item" type="button" data-target="view-hearings">
+                    <span class="nav-icon">🕒</span> Hearings
+                </button>
+                <button class="nav-item" type="button" data-target="view-clients">
+                    <span class="nav-icon">👥</span> Clients
+                </button>
+            </nav>
+            <nav class="nav-group" aria-label="Administration navigation">
+                <div class="nav-label">Administration</div>
+                <button class="nav-item" type="button" data-target="view-reports">
+                    <span class="nav-icon">📊</span> Reports
+                </button>
+                <button class="nav-item" type="button" data-target="view-settings">
+                    <span class="nav-icon">⚙</span> Settings
+                </button>
+            </nav>
+            <div class="sidebar-card">
+                <h3>Judicial Focus</h3>
+                <p>Review five urgent matters before noon and confirm hearing schedules for the afternoon session.</p>
+            </div>
+        </aside>
+
+        <main class="content">
+            <header class="topbar">
+                <div>
+                    <p class="eyebrow">Good morning</p>
+                    <h1 id="view-title">Judicial Dashboard</h1>
+                </div>
+                <div class="topbar-actions">
+                    <label class="search-box" aria-label="Search cases">
+                        <span>🔎</span>
+                        <input type="search" placeholder="Search case files" />
+                    </label>
+                    <button class="primary-btn" type="button" id="open-modal-btn">+ Add Case</button>
+                    <div class="user-pill" aria-label="User profile">
+                        <div class="avatar">JD</div>
+                        <div class="user-meta">
+                            <strong>Judge D. Atieno</strong>
+                            <span id="today-date">Today</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- VIEW CONTAINER: OVERVIEW -->
+            <div id="view-overview" class="dashboard-view active-view">
+                <section class="stats-grid" aria-label="Key court statistics">
+                    <article class="stat-card">
+                        <div class="top">
+                            <p class="label">Cases Filed</p>
+                            <div class="stat-icon blue">📄</div>
+                        </div>
+                        <div class="value"><strong id="metric-total-cases">0</strong><span class="trend up">Total
+                                records</span></div>
+                    </article>
+                    <article class="stat-card">
+                        <div class="top">
+                            <p class="label">Active Matters</p>
+                            <div class="stat-icon green">⚖️</div>
+                        </div>
+                        <div class="value"><strong id="metric-active-cases">0</strong><span class="trend up">Not
+                                closed</span></div>
+                    </article>
+                    <article class="stat-card">
+                        <div class="top">
+                            <p class="label">Hearings</p>
+                            <div class="stat-icon yellow">🗓️</div>
+                        </div>
+                        <div class="value"><strong id="metric-hearings">0</strong><span class="trend down">Scheduled /
+                                in hearing</span></div>
+                    </article>
+                    <article class="stat-card">
+                        <div class="top">
+                            <p class="label">Pending Orders</p>
+                            <div class="stat-icon red">⏳</div>
+                        </div>
+                        <div class="value"><strong id="metric-pending-cases">0</strong><span class="trend up">Pending
+                                status</span></div>
+                    </article>
+                </section>
+
+                <section class="panel-grid">
+                    <article class="panel">
+                        <div class="panel-header">
+                            <h2>Cases by Category</h2>
+                            <div class="filter">Live API Data</div>
+                        </div>
+                        <div class="chart" id="category-chart" aria-label="Cases grouped by category">
+                            <p>Loading case data…</p>
+                        </div>
+                    </article>
+                    <article class="panel">
+                        <div class="panel-header">
+                            <h2>Case Status</h2>
+                            <div class="filter">Live</div>
+                        </div>
+                        <div class="status-stack" id="overview-status-stack">
+                            <p>Loading case data…</p>
+                        </div>
+                    </article>
+                </section>
+
+                <section class="lower-grid">
+                    <article class="panel">
+                        <div class="panel-header">
+                            <h2>Recent Matters</h2>
+                            <div class="filter">Live API Feed</div>
+                        </div>
+                        <div class="table-wrap">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Case ID</th>
+                                        <th>Client</th>
+                                        <th>Category</th>
+                                        <th>Judge</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="overview-cases-table">
+                                    <!-- Loaded dynamically via node backend API -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </article>
+
+                    <article class="panel">
+                        <div class="panel-header">
+                            <h2>Upcoming Sessions</h2>
+                            <div class="filter">This Week</div>
+                        </div>
+                        <ul class="schedule-list" id="overview-schedule-list">
+                            <!-- Loaded dynamically via node backend API -->
+                        </ul>
+                    </article>
+                </section>
+            </div>
+
+            <!-- VIEW CONTAINER: CASES -->
+            <div id="view-cases" class="dashboard-view">
+                <article class="panel">
+                    <div class="panel-header">
+                        <h2>All Court Case Directories</h2>
+                    </div>
+                    <p id="case-status-feedback" class="case-status-feedback" role="status" aria-live="polite"></p>
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Case ID</th>
+                                    <th>Client Name</th>
+                                    <th>Category Branch</th>
+                                    <th>Presiding Magistrate</th>
+                                    <th>Assigned Courtroom</th>
+                                    <th>Registered</th>
+                                    <th>Next Court Date</th>
+                                    <th>Status State</th>
+                                    <th>Update Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="full-cases-table">
+                                <!-- Loaded dynamically via API -->
+                            </tbody>
+                        </table>
+                    </div>
+                </article>
+            </div>
+
+            <!-- VIEW CONTAINER: HEARINGS -->
+            <div id="view-hearings" class="dashboard-view">
+                <article class="panel">
+                    <div class="panel-header">
+                        <h2>Hearing-related Cases</h2>
+                        <div class="filter">Live API Data</div>
+                    </div>
+                    <p>Cases marked for a hearing or with a next court date. Registration timestamps are recorded when a
+                        new case is filed.</p>
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Case ID</th>
+                                    <th>Client</th>
+                                    <th>Category</th>
+                                    <th>Judge</th>
+                                    <th>Registered</th>
+                                    <th>Next Court Date</th>
+                                    <th>Status</th>
+                                    <th>Courtroom</th>
+                                </tr>
+                            </thead>
+                            <tbody id="hearings-cases-table">
+                                <tr>
+                                    <td colspan="8">Loading hearing-related cases…</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </article>
+            </div>
+
+            <!-- VIEW CONTAINER: CLIENTS -->
+            <div id="view-clients" class="dashboard-view">
+                <article class="panel">
+                    <div class="panel-header">
+                        <h2>Clients in the Case Register</h2>
+                        <div class="filter" id="client-count-label">0 clients</div>
+                    </div>
+                    <p>Client records and case history are summarized from the current case register.</p>
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Client</th>
+                                    <th>Cases</th>
+                                    <th>Case IDs</th>
+                                    <th>Categories</th>
+                                    <th>Current Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="clients-table">
+                                <tr>
+                                    <td colspan="5">Loading client records…</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </article>
+            </div>
+
+            <!-- VIEW CONTAINER: REPORTS -->
+            <div id="view-reports" class="dashboard-view">
+                <section class="stats-grid" aria-label="Case register report summary">
+                    <article class="stat-card">
+                        <div class="top">
+                            <p class="label">Total Cases</p>
+                            <div class="stat-icon blue">📄</div>
+                        </div>
+                        <div class="value"><strong id="report-total-cases">0</strong><span class="trend up">In
+                                register</span></div>
+                    </article>
+                    <article class="stat-card">
+                        <div class="top">
+                            <p class="label">Unique Clients</p>
+                            <div class="stat-icon green">👥</div>
+                        </div>
+                        <div class="value"><strong id="report-client-count">0</strong><span class="trend up">With
+                                cases</span></div>
+                    </article>
+                    <article class="stat-card">
+                        <div class="top">
+                            <p class="label">Scheduled Cases</p>
+                            <div class="stat-icon yellow">🗓️</div>
+                        </div>
+                        <div class="value"><strong id="report-scheduled-count">0</strong><span class="trend up">Next
+                                court date set</span></div>
+                    </article>
+                    <article class="stat-card">
+                        <div class="top">
+                            <p class="label">Closed Cases</p>
+                            <div class="stat-icon red">✓</div>
+                        </div>
+                        <div class="value"><strong id="report-closed-count">0</strong><span class="trend up">Closed
+                                status</span></div>
+                    </article>
+                </section>
+                <section class="lower-grid">
+                    <article class="panel">
+                        <div class="panel-header">
+                            <h2>Cases by Status</h2>
+                            <div class="filter">Live API Data</div>
+                        </div>
+                        <div class="table-wrap">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Status</th>
+                                        <th>Cases</th>
+                                        <th>Share</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="report-status-table">
+                                    <tr>
+                                        <td colspan="3">Loading report…</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </article>
+                    <article class="panel">
+                        <div class="panel-header">
+                            <h2>Cases by Category</h2>
+                            <div class="filter">Live API Data</div>
+                        </div>
+                        <div class="table-wrap">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Category</th>
+                                        <th>Cases</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="report-category-table">
+                                    <tr>
+                                        <td colspan="2">Loading report…</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </article>
+                </section>
+                <p class="report-updated" id="report-updated">Report reflects data from the case register.</p>
+            </div>
+
+            <!-- VIEW CONTAINER: SETTINGS -->
+            <div id="view-settings" class="dashboard-view">
+                <article class="panel">
+                    <div class="panel-header">
+                        <h2>System Data</h2>
+                        <div class="filter">Connected to case register</div>
+                    </div>
+                    <p>Case records are stored by the backend in Back-end/case.json and shared with dashboard views
+                        through the cases API.</p>
+                    <p>Client profiles, overview metrics, and reports are calculated from the case records currently
+                        available. User and authorization settings are not provided by the current API.</p>
+                </article>
+            </div>
+        </main>
+    </div>
+    <dialog class="case-dialog" id="case-dialog" aria-labelledby="case-dialog-title">
+        <form id="case-form" class="case-form">
+            <div class="panel-header">
+                <div>
+                    <p class="eyebrow">Court records</p>
+                    <h2 id="case-dialog-title">File a new case</h2>
+                </div>
+                <button class="ghost-btn" type="button" id="close-case-dialog" aria-label="Close">✕</button>
+            </div>
+            <div class="case-form-grid">
+                <label>Client name<input name="client" type="text" autocomplete="name" required /></label>
+                <label>Category
+                    <select name="category" required>
+                        <option value="">Select category</option>
+                        <option>Criminal</option>
+                        <option>Civil</option>
+                        <option>Administrative</option>
+                        <option>Family</option>
+                    </select>
+                </label>
+                <label>Judge<input name="judge" type="text" required /></label>
+                <label>Status
+                    <select name="status" required>
+                        <option value="">Select status</option>
+                        <option>Mention</option>
+                        <option>Pending</option>
+                        <option>Hearing</option>
+                        <option>Review</option>
+                        <option>Closed</option>
+                    </select>
+                </label>
+                <label class="case-form-wide">Courtroom<input name="court" type="text" required /></label>
+                <label>Next court date<input name="nextCourtDate" type="date" /></label>
+                <label>Next court time<input name="nextCourtTime" type="time" /></label>
+            </div>
+            <p class="case-form-message" id="case-form-message" role="status" aria-live="polite"></p>
+            <div class="case-form-actions">
+                <button class="ghost-btn" type="button" id="cancel-case-form">Cancel</button>
+                <button class="primary-btn" type="submit">Save Case</button>
+            </div>
+        </form>
+    </dialog>
+
+    <script>
+        // Populate Calendar Label
+        const dateLabel = document.getElementById('today-date');
+        dateLabel.textContent = new Intl.DateTimeFormat('en-US', {
+            weekday: 'short', month: 'short', day: 'numeric', year: 'numeric'
+        }).format(new Date());
+
+        const caseDialog = document.getElementById('case-dialog');
+        const caseForm = document.getElementById('case-form');
+        const caseFormMessage = document.getElementById('case-form-message');
+
+        document.getElementById('open-modal-btn').addEventListener('click', () => {
+            caseFormMessage.textContent = '';
+            caseDialog.showModal();
+        });
+        document.getElementById('close-case-dialog').addEventListener('click', () => caseDialog.close());
+        document.getElementById('cancel-case-form').addEventListener('click', () => caseDialog.close());
+
+        // Tab Management Engine
+        const navButtons = document.querySelectorAll('.nav-item');
+        const views = document.querySelectorAll('.dashboard-view');
+        const viewTitle = document.getElementById('view-title');
+
+        navButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                navButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+
+                views.forEach(view => view.classList.remove('active-view'));
+
+                const targetId = button.getAttribute('data-target');
+                const targetView = document.getElementById(targetId);
+                if (targetView) targetView.classList.add('active-view');
+
+                // Clean up icon characters from button labels
+                const displayLabel = button.textContent.replace(/[^\w\s]/g, '').trim();
+                viewTitle.textContent = displayLabel === 'Overview' ? 'Judicial Dashboard' : `${displayLabel} View`;
+            });
+        });
+
+        // API Integration Engine
+        async function fetchAndRenderDashboardData() {
+            try {
+                const response = await fetch('/api/cases');
+                if (!response.ok) throw new Error('Could not load cases.');
+                const result = await response.json();
+
+                if (result.success && result.data) {
+                    renderOverviewMetrics(result.data);
+                    renderCategoryChart(result.data);
+                    renderOverviewStatuses(result.data);
+                    renderOverviewTable(result.data);
+                    renderOverviewSchedule(result.data);
+                    renderFullCasesDirectory(result.data);
+                    renderHearingsCases(result.data);
+                    renderClients(result.data);
+                    renderReports(result.data);
+                }
+            } catch (error) {
+                console.error("Critical error pulling court metrics from system server:", error);
+                document.getElementById('clients-table').innerHTML = '<tr><td colspan="5">Unable to load clients. Check that the server is running.</td></tr>';
+                document.getElementById('report-status-table').innerHTML = '<tr><td colspan="3">Unable to load report data.</td></tr>';
+                document.getElementById('report-category-table').innerHTML = '<tr><td colspan="2">Unable to load report data.</td></tr>';
+            }
+        }
+
+        function renderOverviewMetrics(casesData) {
+            const isOpen = c => String(c.status).toLowerCase() !== 'closed';
+            const isHearingRelated = c => c.nextCourtDate || ['hearing', 'review', 'mention'].includes(String(c.status).toLowerCase());
+            document.getElementById('metric-total-cases').textContent = casesData.length;
+            document.getElementById('metric-active-cases').textContent = casesData.filter(isOpen).length;
+            document.getElementById('metric-hearings').textContent = casesData.filter(isHearingRelated).length;
+            document.getElementById('metric-pending-cases').textContent = casesData.filter(c =>
+                String(c.status).toLowerCase() === 'pending'
+            ).length;
+        }
+
+        function renderCategoryChart(casesData) {
+            const chart = document.getElementById('category-chart');
+            const categoryCounts = countBy(casesData, c => c.category || 'Uncategorized');
+            const categories = Object.entries(categoryCounts).sort((a, b) => b[1] - a[1]);
+
+            if (categories.length === 0) {
+                chart.textContent = 'No case data available.';
+                return;
+            }
+
+            const maxCount = Math.max(...categories.map(([, count]) => count));
+            chart.replaceChildren(...categories.map(([category, count]) => {
+                const group = document.createElement('div');
+                group.className = 'bar-group';
+                const stack = document.createElement('div');
+                stack.className = 'bar-stack';
+                const bar = document.createElement('span');
+                bar.className = 'bar primary';
+                bar.style.height = `${Math.max(8, (count / maxCount) * 100)}%`;
+                bar.title = `${category}: ${count}`;
+                stack.appendChild(bar);
+                const label = document.createElement('span');
+                label.className = 'bar-label';
+                label.textContent = category;
+                group.append(stack, label);
+                return group;
+            }));
+        }
+
+        function renderOverviewStatuses(casesData) {
+            const container = document.getElementById('overview-status-stack');
+            const counts = countBy(casesData, c => c.status || 'Unknown');
+            const statuses = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+            if (statuses.length === 0) {
+                container.textContent = 'No case data available.';
+                return;
+            }
+
+            const colors = { hearing: '#1d4ed8', review: '#7c3aed', mention: '#9333ea', pending: '#f59e0b', closed: '#16a34a' };
+            container.replaceChildren(...statuses.map(([status, count]) => {
+                const percentage = Math.round((count / casesData.length) * 100);
+                const card = document.createElement('div');
+                card.className = 'ring-card';
+                const left = document.createElement('div');
+                left.className = 'ring-left';
+                const ring = document.createElement('div');
+                ring.className = 'ring';
+                const color = colors[status.toLowerCase()] || '#64748b';
+                ring.style.background = `conic-gradient(${color} 0 ${percentage}%, #e2e8f0 ${percentage}% 100%)`;
+                const inner = document.createElement('div');
+                inner.className = 'ring-inner';
+                inner.textContent = `${percentage}%`;
+                ring.appendChild(inner);
+                const meta = document.createElement('div');
+                meta.className = 'status-meta';
+                const name = document.createElement('strong');
+                name.textContent = status;
+                const detail = document.createElement('span');
+                detail.textContent = `${count} ${count === 1 ? 'case' : 'cases'}`;
+                meta.append(name, detail);
+                left.append(ring, meta);
+                const number = document.createElement('div');
+                number.className = 'status-number';
+                number.textContent = count;
+                card.append(left, number);
+                return card;
+            }));
+        }
+
+        function countBy(items, getKey) {
+            return items.reduce((counts, item) => {
+                const key = String(getKey(item));
+                counts[key] = (counts[key] || 0) + 1;
+                return counts;
+            }, {});
+        }
+
+        function renderClients(casesData) {
+            const tableBody = document.getElementById('clients-table');
+            const clients = new Map();
+            casesData.forEach(caseItem => {
+                const name = String(caseItem.client || 'Unknown client').trim();
+                if (!clients.has(name)) clients.set(name, []);
+                clients.get(name).push(caseItem);
+            });
+
+            document.getElementById('client-count-label').textContent = `${clients.size} ${clients.size === 1 ? 'client' : 'clients'}`;
+            if (clients.size === 0) {
+                tableBody.innerHTML = '<tr><td colspan="5">No client records are available.</td></tr>';
+                return;
+            }
+
+            tableBody.replaceChildren(...[...clients.entries()].sort(([a], [b]) => a.localeCompare(b)).map(([name, clientCases]) => {
+                const row = document.createElement('tr');
+                const values = [
+                    name,
+                    clientCases.length,
+                    clientCases.map(c => c.id).join(', '),
+                    [...new Set(clientCases.map(c => c.category))].join(', '),
+                    [...new Set(clientCases.map(c => c.status))].join(', ')
+                ];
+                values.forEach(value => {
+                    const cell = document.createElement('td');
+                    cell.textContent = value;
+                    row.appendChild(cell);
+                });
+                return row;
+            }));
+        }
+
+        function renderReports(casesData) {
+            const statusBody = document.getElementById('report-status-table');
+            const categoryBody = document.getElementById('report-category-table');
+            const clientCount = new Set(casesData.map(c => String(c.client || 'Unknown client').trim())).size;
+            const scheduledCount = casesData.filter(c => c.nextCourtDate).length;
+            const closedCount = casesData.filter(c => String(c.status).toLowerCase() === 'closed').length;
+
+            document.getElementById('report-total-cases').textContent = casesData.length;
+            document.getElementById('report-client-count').textContent = clientCount;
+            document.getElementById('report-scheduled-count').textContent = scheduledCount;
+            document.getElementById('report-closed-count').textContent = closedCount;
+            document.getElementById('report-updated').textContent = `Report refreshed ${new Intl.DateTimeFormat('en-US', {
+                dateStyle: 'medium', timeStyle: 'short'
+            }).format(new Date())}.`;
+
+            const statuses = Object.entries(countBy(casesData, c => c.status || 'Unknown')).sort((a, b) => b[1] - a[1]);
+            if (statuses.length === 0) {
+                statusBody.innerHTML = '<tr><td colspan="3">No case data available.</td></tr>';
+            } else {
+                statusBody.replaceChildren(...statuses.map(([status, count]) => {
+                    const row = document.createElement('tr');
+                    const statusCell = document.createElement('td');
+                    const tag = document.createElement('span');
+                    tag.className = `case-tag ${status.toLowerCase()}`;
+                    tag.textContent = status;
+                    statusCell.appendChild(tag);
+                    const countCell = document.createElement('td');
+                    countCell.textContent = count;
+                    const shareCell = document.createElement('td');
+                    shareCell.textContent = `${Math.round((count / casesData.length) * 100)}%`;
+                    row.append(statusCell, countCell, shareCell);
+                    return row;
+                }));
+            }
+
+            const categories = Object.entries(countBy(casesData, c => c.category || 'Uncategorized')).sort((a, b) => b[1] - a[1]);
+            if (categories.length === 0) {
+                categoryBody.innerHTML = '<tr><td colspan="2">No case data available.</td></tr>';
+            } else {
+                categoryBody.replaceChildren(...categories.map(([category, count]) => {
+                    const row = document.createElement('tr');
+                    const categoryCell = document.createElement('td');
+                    categoryCell.textContent = category;
+                    const countCell = document.createElement('td');
+                    countCell.textContent = count;
+                    row.append(categoryCell, countCell);
+                    return row;
+                }));
+            }
+        }
+
+        function renderOverviewTable(casesData) {
+            const tableBody = document.getElementById('overview-cases-table');
+            if (!tableBody) return;
+
+            tableBody.replaceChildren(...casesData.map(c => {
+                const row = document.createElement('tr');
+                [c.id, c.client, c.category, c.judge].forEach(value => {
+                    const cell = document.createElement('td');
+                    cell.textContent = value;
+                    row.appendChild(cell);
+                });
+                const statusCell = document.createElement('td');
+                const statusTag = document.createElement('span');
+                statusTag.className = `case-tag ${String(c.status).toLowerCase()}`;
+                statusTag.textContent = c.status;
+                statusCell.appendChild(statusTag);
+                row.appendChild(statusCell);
+                return row;
+            }));
+        }
+
+        function renderOverviewSchedule(casesData) {
+            const listContainer = document.getElementById('overview-schedule-list');
+            if (!listContainer) return;
+
+            const scheduledCases = casesData
+                .filter(c => c.nextCourtDate)
+                .sort((a, b) => a.nextCourtDate.localeCompare(b.nextCourtDate));
+
+            if (scheduledCases.length === 0) {
+                const emptyMessage = document.createElement('li');
+                emptyMessage.className = 'schedule-item';
+                emptyMessage.textContent = 'No next court dates have been scheduled.';
+                listContainer.replaceChildren(emptyMessage);
+                return;
+            }
+
+            listContainer.replaceChildren(...scheduledCases.map(c => {
+                const item = document.createElement('li');
+                item.className = 'schedule-item';
+                const dateBox = document.createElement('div');
+                dateBox.className = 'date-box';
+                const day = document.createElement('strong');
+                day.textContent = new Date(`${c.nextCourtDate}T00:00:00`).getDate();
+                const weekday = document.createElement('span');
+                weekday.textContent = new Intl.DateTimeFormat('en-US', { weekday: 'short' })
+                    .format(new Date(`${c.nextCourtDate}T00:00:00`));
+                dateBox.append(day, weekday);
+                const details = document.createElement('div');
+                const title = document.createElement('h4');
+                title.textContent = `${c.category} Docket - ${c.client}`;
+                const description = document.createElement('p');
+                description.textContent = `${formatDate(c.nextCourtDate)} · ${formatTime(c.nextCourtTime)} · ${c.court} (${c.judge})`;
+                details.append(title, description);
+                item.append(dateBox, details);
+                return item;
+            }));
+        }
+
+        function renderFullCasesDirectory(casesData) {
+            const fullTableBody = document.getElementById('full-cases-table');
+            if (!fullTableBody) return;
+
+            fullTableBody.replaceChildren(...casesData.map(c => {
+                const row = document.createElement('tr');
+                [c.id, c.client, c.category, c.judge, c.court].forEach(value => {
+                    const cell = document.createElement('td');
+                    cell.textContent = value;
+                    row.appendChild(cell);
+                });
+                const registeredCell = document.createElement('td');
+                registeredCell.textContent = formatRegisteredAt(c.registeredAt);
+                row.appendChild(registeredCell);
+                const nextCourtCell = document.createElement('td');
+                nextCourtCell.textContent = formatNextCourt(c.nextCourtDate, c.nextCourtTime);
+                row.appendChild(nextCourtCell);
+                const statusCell = document.createElement('td');
+                const statusTag = document.createElement('span');
+                statusTag.className = `case-tag ${String(c.status).toLowerCase()}`;
+                statusTag.textContent = c.status;
+                statusCell.appendChild(statusTag);
+                row.appendChild(statusCell);
+
+                const updateCell = document.createElement('td');
+                const updateForm = document.createElement('form');
+                updateForm.className = 'status-update-form';
+                updateForm.dataset.caseId = c.id;
+                const statusSelect = document.createElement('select');
+                statusSelect.setAttribute('aria-label', `New status for ${c.id}`);
+                const statuses = [...new Set(['Pending', 'Hearing', 'Review', 'Mention', 'Closed', c.status])];
+                statuses.forEach(status => {
+                    const option = document.createElement('option');
+                    option.value = status;
+                    option.textContent = status;
+                    option.selected = status === c.status;
+                    statusSelect.appendChild(option);
+                });
+                const updateButton = document.createElement('button');
+                updateButton.className = 'ghost-btn';
+                updateButton.type = 'submit';
+                updateButton.textContent = 'Update';
+                updateForm.append(statusSelect, updateButton);
+                updateCell.appendChild(updateForm);
+                row.appendChild(updateCell);
+                return row;
+            }));
+        }
+
+        document.getElementById('full-cases-table').addEventListener('submit', async (event) => {
+            const updateForm = event.target.closest('.status-update-form');
+            if (!updateForm) return;
+            event.preventDefault();
+
+            const updateButton = updateForm.querySelector('button[type="submit"]');
+            const status = updateForm.querySelector('select').value;
+            const caseId = updateForm.dataset.caseId;
+            const feedback = document.getElementById('case-status-feedback');
+            updateButton.disabled = true;
+            feedback.textContent = '';
+
+            try {
+                const response = await fetch(`/api/cases/${encodeURIComponent(caseId)}/status`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ status })
+                });
+                const result = await response.json();
+                if (!response.ok || !result.success) {
+                    throw new Error(result.message || 'Could not update case status.');
+                }
+
+                feedback.textContent = `${caseId} status updated to ${status}.`;
+                await fetchAndRenderDashboardData();
+            } catch (error) {
+                feedback.textContent = error.message || 'Could not update case status.';
+            } finally {
+                updateButton.disabled = false;
+            }
+        });
+
+        function renderHearingsCases(casesData) {
+            const tableBody = document.getElementById('hearings-cases-table');
+            if (!tableBody) return;
+
+            const hearingCases = casesData
+                .filter(c => c.nextCourtDate || ['hearing', 'review', 'mention'].includes(String(c.status).toLowerCase()))
+                .sort((a, b) => {
+                    if (!a.nextCourtDate) return 1;
+                    if (!b.nextCourtDate) return -1;
+                    return a.nextCourtDate.localeCompare(b.nextCourtDate);
+                });
+
+            if (hearingCases.length === 0) {
+                const row = document.createElement('tr');
+                const cell = document.createElement('td');
+                cell.colSpan = 8;
+                cell.textContent = 'No hearing-related cases or scheduled court dates are available.';
+                row.appendChild(cell);
+                tableBody.replaceChildren(row);
+                return;
+            }
+
+            tableBody.replaceChildren(...hearingCases.map(c => {
+                const row = document.createElement('tr');
+                [c.id, c.client, c.category, c.judge].forEach(value => {
+                    const cell = document.createElement('td');
+                    cell.textContent = value;
+                    row.appendChild(cell);
+                });
+                const registeredCell = document.createElement('td');
+                registeredCell.textContent = formatRegisteredAt(c.registeredAt);
+                row.appendChild(registeredCell);
+                const nextCourtCell = document.createElement('td');
+                nextCourtCell.textContent = formatNextCourt(c.nextCourtDate, c.nextCourtTime);
+                row.appendChild(nextCourtCell);
+                const statusCell = document.createElement('td');
+                const statusTag = document.createElement('span');
+                statusTag.className = `case-tag ${String(c.status).toLowerCase()}`;
+                statusTag.textContent = c.status;
+                statusCell.appendChild(statusTag);
+                row.appendChild(statusCell);
+                const courtCell = document.createElement('td');
+                courtCell.textContent = c.court;
+                row.appendChild(courtCell);
+                return row;
+            }));
+        }
+
+        function formatRegisteredAt(value) {
+            if (!value) return 'Not recorded';
+            const date = new Date(value);
+            return Number.isNaN(date.getTime()) ? 'Not recorded' : new Intl.DateTimeFormat('en-US', {
+                dateStyle: 'medium', timeStyle: 'short'
+            }).format(date);
+        }
+
+        function formatDate(value) {
+            if (!value) return 'Not scheduled';
+            const date = new Date(`${value}T00:00:00`);
+            return Number.isNaN(date.getTime()) ? 'Not scheduled' : new Intl.DateTimeFormat('en-US', {
+                dateStyle: 'medium'
+            }).format(date);
+        }
+
+        function formatTime(value) {
+            if (!value) return 'Time not set';
+            const [hours, minutes] = value.split(':').map(Number);
+            const date = new Date();
+            date.setHours(hours, minutes, 0, 0);
+            return new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: '2-digit' }).format(date);
+        }
+
+        function formatNextCourt(date, time) {
+            if (!date) return 'Not scheduled';
+            return `${formatDate(date)}${time ? ` · ${formatTime(time)}` : ''}`;
+        }
+
+        caseForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const submitButton = caseForm.querySelector('[type="submit"]');
+            submitButton.disabled = true;
+            caseFormMessage.textContent = 'Saving case…';
+
+            try {
+                const formData = new FormData(caseForm);
+                const response = await fetch('/api/cases', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(Object.fromEntries(formData.entries()))
+                });
+                const result = await response.json();
+                if (!response.ok || !result.success) {
+                    throw new Error(result.message || 'Unable to save the case.');
+                }
+
+                caseForm.reset();
+                caseDialog.close();
+                await fetchAndRenderDashboardData();
+            } catch (error) {
+                caseFormMessage.textContent = error.message || 'Unable to save the case. Check that the server is running.';
+            } finally {
+                submitButton.disabled = false;
+            }
+        });
+
+        // Bootstrap initialization hooks on window ready
+        window.addEventListener('DOMContentLoaded', fetchAndRenderDashboardData);
+    </script>
+</body>
+
+</html>
